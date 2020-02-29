@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>River Wood Switch</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img
+          src="images/riverwood.png"
+          class="logo--img"
+          alt="Riverwoodswitch"
+        />
+      </div>
+      <nav class="nav">
+        <ul class="nav__list">
+          <li class="nav__list--item"><a href="#">Home</a></li>
+          <li class="nav__list--item"><a href="#">About Us</a></li>
+          <li class="nav__list--item"><a href="#">Team</a></li>
+          <li class="nav__list--item"><a href="#">Project</a></li>
+          <li class="nav__list--item"><a href="#">Member</a></li>
+          <li class="nav__list--item"><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="donate">
+        <button class="btn">Donate</button>
+      </div>
+    </header>
+    <main>
+      <section class="info">
+        <section class="info__img-container">
+          <img
+            src="images/riverwoodswitchmembers.jpg"
+            class="info__img-container--img"
+            alt="Riverwoodswitch"
+          />
+        </section>
+        <section class="info__box">
+          <h1 class="info__box--title">Volunteer Badge</h1>
+          <p class="info__box--content">
+            Hello! Welcome to our family <br />
+            We have a beautifully designed volunteer badge for you!. <br />
+            This is to help you tell the world you are our volunteer.
+          </p>
+        </section>
+      </section>
+      <section class="body">
+        <div class="body__container">
+          <h5 class="body--title">Supply the information below</h5>
+          <form class="body__form form" method="post" id="form">
+            <input
+              type="text"
+              class="form--input"
+              placeholder="First Name"
+              name="firstName"
+              required
+            />
+            <input
+              type="text"
+              class="form--input"
+              placeholder="Last Name"
+              name="lastName"
+              required
+            />
+            <input
+              type="file"
+              name="image"
+              class="form--input"
+              accept="image/*"
+              required
+            />
+            <div class="form__submit">
+              <button class="btn" type="submit">
+                GENERATE BADGE
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+    <div class="loader hide" id="loader">
+      <div class="loadingio-spinner-eclipse-fdjij0l7048">
+        <div class="ldio-qt91npdc9ba">
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="index.js"></script>
+</html>
