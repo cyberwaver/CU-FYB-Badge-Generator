@@ -1,16 +1,14 @@
 const express = require("express");
 const path = require("path");
+const Buffer = require("buffer");
 const ejs = require("ejs");
 const app = express();
 const cors = require("cors");
 const multer = require("multer");
-const shortId = require("shortid");
-const moment = require("moment");
+const puppeteer = require("puppeteer");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
-const scheduler = require("node-schedule");
 const fs = require("fs");
-const EventEmitter = require("events");
 const PORT = process.env.PORT || 3223;
 
 const adapter = new FileSync("db.json");
@@ -44,75 +42,115 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.post("/", upload.single("image"), (req, res) => {
-  const { filename } = req.file || {};
-  const { firstName, lastName } = req.body;
-  if (!firstName || !lastName)
-    return res.json({
-      status: "error",
-      message: "FirstName or lastName empty"
+app.post("/generate", upload.single("image"), (req, res) => {
+  return (async () => {
+    const { filename } = req.file || {};
+    const { firstName, lastName } = req.body;
+    if (!firstName || !lastName) return res.send("false");
+    if (!filename) return res.send("false");
+    let browser = await puppeteer.launch({
+      headless: true,
+      defaultViewport: {
+        width: 1080,
+        height: 1080
+      }
     });
-  if (!filename) return res.json({ status: "error", message: "File empty" });
-  const id = shortId.generate();
-  db.get("uploads")
-    .push({
-      id,
-      firstName,
-      lastName,
-      fileName: filename,
-      timestamp: Date.now()
-    })
-    .write();
-  db.update("count", n => n + 1).write();
+    let page = await browser.newPage();
+    await page.goto(
+      `file://${path.resolve(__dirname, "public", "badge.html")}`
+    );
+    const height = await page.evaluate(
+      ({ firstName, lastName, filename }) => {
+        const randomColor = (() => {
+          const colors = [
+            "#ff206e",
+            "#fee12b",
+            "#0019cc",
+            "#bfff00",
+            "#ff4500"
+          ];
+          const i = Math.floor(Math.random() * 6);
+          return colors[i];
+        })();
+        const _ = e => document.querySelector(e);
+        _("#badge").style.backgroundColor = randomColor;
+        _("#badge-image").style.backgroundImage = `url(uploads/${filename})`;
+        _("#badge-firstname").textContent = firstName;
+        _("#badge-lastname").textContent = lastName;
+        return document.body.scrollHeight;
+      },
+      { firstName, filename, lastName }
+    );
 
-  return res.json({ status: "success", message: id });
-});
+    const badge = await page.$("#badge");
+    const bounding_box = await badge.boundingBox();
 
-app.get("/:id", (req, res) => {
-  const { id } = req.params;
-  const data = db
-    .get("uploads")
-    .find({ id })
-    .value();
-  if (!data) return res.redirect("/");
-  const randomColor = () => {
-    const colors = ["#ff206e", "#fee12b", "#0019cc", "#bfff00", "#ff4500"];
-    const i = Math.floor(Math.random() * 6);
-    return colors[i];
-  };
-  res.render("badge", { randomColor, ...data });
+    const baseImage = await badge.screenshot({
+      type: "jpeg",
+      omitBackground: true,
+      quality: 100,
+      encoding: "base64",
+      clip: {
+        x: bounding_box.x,
+        y: bounding_box.y,
+        width: Math.min(bounding_box.width, page.viewport().width),
+        height: Math.min(bounding_box.height, page.viewport().height)
+      }
+    });
+    await browser.close();
+    fs.unlinkSync(__dirname + "/public/uploads/" + filename);
+    res.send(baseImage);
+  })();
 });
 
 app.listen(PORT, () => console.log(`Server listening: ${PORT}`));
 
-///////////////////////////////////////////////////
-const imageRemover = () => {
-  const { uploads } = db.getState();
-  const list = uploads.map(({ id, timestamp, fileName }) => {
-    return (
-      moment(moment(Date.now())).diff(timestamp, "minutes") > 30 && {
-        id,
-        fileName
-      }
-    );
-  });
-  list.forEach(({ id, fileName }) => {
-    db.get("uploads")
-      .remove({ id })
-      .write();
-    fs.unlinkSync(__dirname + `/public/uploads/${fileName}`);
-  });
-  return;
-};
+// (async () => {
+//   const filename = "Olowolabi-Adebolanle-1.jpg";
+//   firstName = "hope";
+//   lastName = "Praise";
+//   let browser = await puppeteer.launch({
+//     headless: true,
+//     defaultViewport: {
+//       width: 1080,
+//       height: 1080
+//     }
+//   });
+//   let page = await browser.newPage();
+//   await page.goto(`file://${path.resolve(__dirname, "public", "badge.html")}`);
+//   const height = await page.evaluate(
+//     ({ firstName, lastName, filename }) => {
+//       const randomColor = (() => {
+//         const colors = ["#ff206e", "#fee12b", "#0019cc", "#bfff00", "#ff4500"];
+//         const i = Math.floor(Math.random() * 6);
+//         return colors[i];
+//       })();
+//       const _ = e => document.querySelector(e);
+//       _("#badge").style.backgroundColor = randomColor;
+//       _("#badge-image").style.backgroundImage = `url(uploads/${filename})`;
+//       _("#badge-firstname").textContent = firstName;
+//       _("#badge-lastname").textContent = lastName;
+//       return document.body.scrollHeight;
+//     },
+//     { firstName, filename, lastName }
+//   );
 
-class MyEmitter extends EventEmitter {}
+//   const badge = await page.$("#badge");
+//   const bounding_box = await badge.boundingBox();
 
-const myEmitter = new MyEmitter();
-myEmitter.on("checkfiles", () => {
-  imageRemover();
-});
-
-var j = scheduler.scheduleJob("*/30 * * * *", function() {
-  console.log("Running Scheduler");
-  myEmitter.emit("checkfiles");
-});
+//   const baseImage = await badge.screenshot({
+//     type: "jpeg",
+//     omitBackground: true,
+//     quality: 100,
+//     encoding: "base64",
+//     clip: {
+//       x: bounding_box.x,
+//       y: bounding_box.y,
+//       width: Math.min(bounding_box.width, page.viewport().width),
+//       height: Math.min(bounding_box.height, page.viewport().height)
+//     }
+//   });
+//   await browser.close();
+//   fs.writeFileSync(__dirname + "/temp/testy.jpeg", baseImage, "base64");
+//   console.log("DONE");
+// })();
