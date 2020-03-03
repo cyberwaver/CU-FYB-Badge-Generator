@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const Buffer = require("buffer");
 const ejs = require("ejs");
 const app = express();
 const cors = require("cors");
@@ -8,22 +7,13 @@ const multer = require("multer");
 const puppeteer = require("puppeteer");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
-const fs = require("fs");
 const PORT = process.env.PORT || 3223;
 
 const adapter = new FileSync("db.json");
 const db = low(adapter);
 
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, __dirname + "/public/uploads");
-  },
-  filename: function(req, { fieldname, originalname }, cb) {
-    cb(null, fieldname + "-" + Date.now() + path.extname(originalname));
-  }
-});
-
-const upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ uploads: [], count: 0 }).write();
@@ -44,10 +34,11 @@ app.get("/", (req, res) => {
 
 app.post("/generate", upload.single("image"), (req, res) => {
   return (async () => {
-    const { filename } = req.file || {};
+    const { buffer: fileBuffer } = req.file || {};
+    const file = fileBuffer.toString("base64");
     const { firstName, lastName } = req.body;
     if (!firstName || !lastName) return res.send("false");
-    if (!filename) return res.send("false");
+    if (!req.file) return res.send("false");
     let browser = await puppeteer.launch({
       headless: true,
       defaultViewport: {
@@ -59,8 +50,8 @@ app.post("/generate", upload.single("image"), (req, res) => {
     await page.goto(
       `file://${path.resolve(__dirname, "public", "badge.html")}`
     );
-    const height = await page.evaluate(
-      ({ firstName, lastName, filename }) => {
+    await page.evaluate(
+      ({ firstName, lastName, file }) => {
         const randomColor = (() => {
           const colors = [
             "#ff206e",
@@ -74,12 +65,12 @@ app.post("/generate", upload.single("image"), (req, res) => {
         })();
         const _ = e => document.querySelector(e);
         _("#badge").style.backgroundColor = randomColor;
-        _("#badge-image").style.backgroundImage = `url(uploads/${filename})`;
+        _("#badge-image").src = `data:image/png;base64,${file}`;
         _("#badge-firstname").textContent = firstName;
         _("#badge-lastname").textContent = lastName;
-        return document.body.scrollHeight;
+        return;
       },
-      { firstName, filename, lastName }
+      { firstName, file, lastName }
     );
 
     const badge = await page.$("#badge");
@@ -98,7 +89,6 @@ app.post("/generate", upload.single("image"), (req, res) => {
       }
     });
     await browser.close();
-    fs.unlinkSync(__dirname + "/public/uploads/" + filename);
     res.send(baseImage);
   })();
 });

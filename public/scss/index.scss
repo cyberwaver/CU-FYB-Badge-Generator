@@ -199,9 +199,13 @@ body {
     // padding-left: 1px;
     &__img-container {
       flex: 10;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+      &--img {
+        display: block;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
     }
     &--text {
       flex: 1;

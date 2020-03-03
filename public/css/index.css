@@ -148,10 +148,13 @@ body {
     display: flex;
     flex-direction: column; }
     .badge__left__img-container {
-      flex: 10;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover; }
+      flex: 10; }
+      .badge__left__img-container--img {
+        display: block;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center; }
     .badge__left--text {
       flex: 1;
       -ms-word-break: break-all;
