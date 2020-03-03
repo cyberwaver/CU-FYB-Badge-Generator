@@ -41,6 +41,7 @@ app.post("/generate", upload.single("image"), (req, res) => {
     if (!req.file) return res.send("false");
     let browser = await puppeteer.launch({
       headless: true,
+      args: ["--no-sandbox"],
       defaultViewport: {
         width: 1080,
         height: 1080
