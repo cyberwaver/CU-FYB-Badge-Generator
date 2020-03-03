@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "scss": "node-sass --watch public/scss/ -o public/css",
-    "start": "nodemon server --ignore public/ "
+    "start": "node index"
   },
   "keywords": [],
   "author": "",
