@@ -30,13 +30,26 @@ const loader = status =>
         method: "POST",
         data: formData,
         url: "/generate",
-        responseType: "stream",
-        responseEncoding: "base64"
+        responseType: "stream"
       });
-      var file = new File([data], "Riverwoodswitch-badge.png", {
-        type: "image/png;charset=base64"
+      const byteString = atob(data);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i += 1) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const newBlob = new Blob([ab], {
+        type: "image/png"
       });
-      saveAs(file);
+
+      const newFile = new File([newBlob], "Riverwoodswitch-badge.png", {
+        type: "image/png",
+        lastModified: Date.now()
+      });
+      // const newData = new Blob([data], { type: "image/png" });
+      // const file = new File([newData], "Riverwoodswitch-badge.png");
+      console.log(newFile, newBlob);
+      saveAs(newFile);
       loader(false);
       // window.location.reload();
     } catch (err) {
