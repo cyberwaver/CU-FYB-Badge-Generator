@@ -33,12 +33,15 @@ const loader = status =>
         responseType: "stream",
         responseEncoding: "base64"
       });
-      const a = _("#download-image");
-      a.href = `data:image/png;base64,${data}`;
-      a.click();
+      var file = new File([data], "Riverwoodswitch-badge.png", {
+        type: "image/png;charset=base64"
+      });
+      saveAs(file);
       loader(false);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
-      return alert(err.response.data);
+      const { response } = err;
+      loader(false);
+      return alert(response ? response.data : err);
     }
   });

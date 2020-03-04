@@ -55,17 +55,15 @@ app.post("/generate", upload.single("image"), (req, res) => {
     );
     await page.evaluate(
       ({ firstName, lastName, file }) => {
-        const { bg, fc } = (() => {
-          const colors = [
-            { bg: "#ff226e", fc: "#fff" },
-            { bg: "#01a8cc", fc: "#fff" },
-            { bg: "#ff4500", fc: "#fff" },
-            { bg: "#c0ff02", fc: "#333" },
-            { bg: "#f6dc2a", fc: "#333" }
-          ];
-          const i = Math.floor(Math.random() * 6);
-          return colors[i];
-        })();
+        const colors = [
+          { bg: "#ff226e", fc: "#fff" },
+          { bg: "#01a8cc", fc: "#fff" },
+          { bg: "#ff4500", fc: "#fff" },
+          { bg: "#c0ff02", fc: "#333" },
+          { bg: "#f6dc2a", fc: "#333" }
+        ];
+        const i = Math.floor(Math.random() * 5);
+        const { bg, fc } = colors[i];
         const _ = e => document.querySelector(e);
         _("#badge").style.backgroundColor = bg;
         _("#badge").style.color = fc;
