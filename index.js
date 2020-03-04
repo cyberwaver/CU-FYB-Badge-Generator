@@ -54,19 +54,13 @@ app.post("/generate", upload.single("image"), (req, res) => {
     await page.evaluate(
       ({ firstName, lastName, file }) => {
         const randomColor = (() => {
-          const colors = [
-            "#ff206e",
-            "#fee12b",
-            "#0019cc",
-            "#bfff00",
-            "#ff4500"
-          ];
+          const colors = ["#ff206e", "#0019cc", "#ff4500"];
           const i = Math.floor(Math.random() * 6);
           return colors[i];
         })();
         const _ = e => document.querySelector(e);
         _("#badge").style.backgroundColor = randomColor;
-        _("#badge-image").src = `data:image/png;base64,${file}`;
+        _("#badge-image").src = `data:image/jpeg;base64,${file}`;
         _("#badge-firstname").textContent = firstName;
         _("#badge-lastname").textContent = lastName;
         return;
@@ -78,9 +72,7 @@ app.post("/generate", upload.single("image"), (req, res) => {
     const bounding_box = await badge.boundingBox();
 
     const baseImage = await badge.screenshot({
-      type: "jpeg",
       omitBackground: true,
-      quality: 100,
       encoding: "base64",
       clip: {
         x: bounding_box.x,
