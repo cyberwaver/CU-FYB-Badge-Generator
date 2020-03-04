@@ -34,11 +34,13 @@ app.get("/", (req, res) => {
 
 app.post("/generate", upload.single("image"), (req, res) => {
   return (async () => {
+    // console.log(req.body);
+    const { firstName, lastName } = req.body;
+    if (!firstName || !lastName)
+      return res.status(404).send("First name or last name not found");
+    if (!req.file) return res.status(404).send("File not found");
     const { buffer: fileBuffer } = req.file || {};
     const file = fileBuffer.toString("base64");
-    const { firstName, lastName } = req.body;
-    if (!firstName || !lastName) return res.send("false");
-    if (!req.file) return res.send("false");
     let browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox"],
@@ -53,13 +55,20 @@ app.post("/generate", upload.single("image"), (req, res) => {
     );
     await page.evaluate(
       ({ firstName, lastName, file }) => {
-        const randomColor = (() => {
-          const colors = ["#ff206e", "#0019cc", "#ff4500"];
+        const { bg, fc } = (() => {
+          const colors = [
+            { bg: "#ff226e", fc: "#fff" },
+            { bg: "#01a8cc", fc: "#fff" },
+            { bg: "#ff4500", fc: "#fff" },
+            { bg: "#c0ff02", fc: "#333" },
+            { bg: "#f6dc2a", fc: "#333" }
+          ];
           const i = Math.floor(Math.random() * 6);
           return colors[i];
         })();
         const _ = e => document.querySelector(e);
-        _("#badge").style.backgroundColor = randomColor;
+        _("#badge").style.backgroundColor = bg;
+        _("#badge").style.color = fc;
         _("#badge-image").src = `data:image/jpeg;base64,${file}`;
         _("#badge-firstname").textContent = firstName;
         _("#badge-lastname").textContent = lastName;
@@ -82,7 +91,8 @@ app.post("/generate", upload.single("image"), (req, res) => {
       }
     });
     await browser.close();
-    res.send(baseImage);
+    res.write(baseImage);
+    res.end();
   })();
 });
 

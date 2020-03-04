@@ -25,13 +25,20 @@ const loader = status =>
       const { value, name, type, files } = item;
       formData.append(name, type === "file" ? files[0] : value);
     });
-    const res = await fetch("/generate", { method: "POST", body: formData });
-    const resp = await res.blob();
-    if (resp === "false") return alert("An error occured");
-    const text = await resp.text();
-    const a = _("#download-image");
-    a.href = `data:image/png;base64,${text}`;
-    a.click();
-    loader(false);
-    window.location.reload();
+    try {
+      const { data } = await axios({
+        method: "POST",
+        data: formData,
+        url: "/generate",
+        responseType: "stream",
+        responseEncoding: "base64"
+      });
+      const a = _("#download-image");
+      a.href = `data:image/png;base64,${data}`;
+      a.click();
+      loader(false);
+      window.location.reload();
+    } catch (err) {
+      return alert(err.response.data);
+    }
   });
