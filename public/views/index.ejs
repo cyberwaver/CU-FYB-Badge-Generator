@@ -28,10 +28,10 @@
           <li class="nav__list--item"><a href="#">Member</a></li>
           <li class="nav__list--item"><a href="#">Contact</a></li>
         </ul>
+        <div class="nav__donate">
+          <button class="btn">Donate</button>
+        </div>
       </nav>
-      <div class="donate">
-        <button class="btn">Donate</button>
-      </div>
     </header>
     <main>
       <section class="info">
@@ -43,12 +43,14 @@
           />
         </section>
         <section class="info__box">
-          <h1 class="info__box--title">Volunteer Badge</h1>
-          <p class="info__box--content">
-            Hello! Welcome to our family <br />
-            We have a beautifully designed volunteer badge for you!. <br />
-            This is to help you tell the world you are our volunteer.
-          </p>
+          <div>
+            <h1 class="info__box--title">Volunteer Badge</h1>
+            <p class="info__box--content">
+              Hello! Welcome to our family <br />
+              We have a beautifully designed volunteer badge for you!. <br />
+              This is to help you tell the world you are our volunteer.
+            </p>
+          </div>
         </section>
       </section>
       <section class="body">
@@ -91,7 +93,11 @@
       </section>
     </main>
     <div class="loader hide" id="loader">
-      <div class="loadingio-spinner-eclipse-fdjij0l7048">
+      <div class="loadingio-spinner-eclipse-fdjij0l7048 loader__box">
+        <div class="loader__box--text">
+          <div id='loader-type'>Uploading...</div>
+          <div id="loader-percent">23%</div>
+        </div style="color: red">
         <div class="ldio-qt91npdc9ba">
           <div></div>
         </div>

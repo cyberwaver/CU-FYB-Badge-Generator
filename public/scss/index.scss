@@ -5,6 +5,8 @@ $badge-color-blue: #0019cc;
 $badge-color-lemon: #bfff00;
 $badge-color-orange: #ff4500;
 
+$md: 768px;
+
 @mixin align($position) {
   display: flex;
   align-items: center;
@@ -32,31 +34,55 @@ body {
   top: 0;
   bottom: 0;
   width: 100%;
-  background-color: rgba(grey, 0.8);
+  background-color: rgba(grey, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  &__box {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+    &--text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: rgba(white, 0.6);
+      & > * {
+        &:first-child {
+          font-size: 13px;
+        }
+        &:last-child {
+          font-size: 25px;
+        }
+      }
+    }
+  }
 }
 
 .header {
   height: 70px;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 50px 60px;
+  justify-content: space-between;
+  padding: 40px 0;
   overflow: hidden;
   box-shadow: 0px 3px 11px -3px rgba(155, 89, 152, 1);
   border-bottom: 1px solid rgba(155, 89, 152, 0.5);
-  & > * {
-    &:not(:last-child) {
-      margin-right: 20px;
+  @media only screen and (max-width: $md) {
+    display: block;
+    padding: 0;
+    .nav {
+      display: none;
     }
   }
 }
 
 .logo {
-  flex: 1.6;
+  flex: 1;
   align-self: center;
   &--img {
     display: block;
@@ -69,7 +95,9 @@ body {
 
 .nav {
   flex: 3;
+  display: flex;
   &__list {
+    flex: 4;
     list-style: none;
     display: flex;
     &--item {
@@ -91,39 +119,48 @@ body {
       }
     }
   }
-}
-
-.donate {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+  &__donate {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .info {
   display: flex;
-  min-height: 300px;
-  overflow: hidden;
+  max-height: 300px;
   &__img-container {
     flex: 3;
     &--img {
       width: 100%;
-      max-height: 300px;
+      height: 100%;
       object-fit: cover;
       object-position: top;
     }
   }
   &__box {
+    overflow: hidden;
     flex: 2;
-    align-self: center;
+    display: flex;
+    align-items: center;
     padding: 0 30px;
+    background-color: $color-main;
+    color: #fff;
     &--title {
       line-height: 45px;
       font-size: 25px;
-      color: $color-main;
     }
     &--content {
       line-height: 25px;
       font-size: 17px;
+    }
+  }
+  @media only screen and (max-width: $md) {
+    &__img-container {
+      display: none;
+    }
+    &__box {
+      padding: 30px 20px;
     }
   }
 }
@@ -168,6 +205,7 @@ body {
   padding: 15px 10px;
   background-color: $color-main;
   color: white;
+  font-family: inherit;
   font-weight: normal;
   font-size: 17px;
   border: none;

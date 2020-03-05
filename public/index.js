@@ -2,8 +2,18 @@ let E;
 
 const _ = e => document.querySelector(e);
 
+const serverStatus = type => ({ loaded, total }) => {
+  return loaderText(type, Math.floor((loaded / total) * 100));
+};
+
 const loader = status =>
   _("#loader").classList[status ? "remove" : "add"]("hide");
+
+const loaderText = (type, percent) => {
+  _("#loader-type").textContent = type;
+  _("#loader-percent").textContent = `${percent}%`;
+  return;
+};
 
 (E = _("#download")) &&
   E.addEventListener("click", () => {
@@ -30,7 +40,9 @@ const loader = status =>
         method: "POST",
         data: formData,
         url: "/generate",
-        responseType: "stream"
+        responseType: "stream",
+        onUploadProgress: serverStatus("Uploading..."),
+        onDownloadProgress: serverStatus("Downloading...")
       });
       const byteString = atob(data);
       const ab = new ArrayBuffer(byteString.length);
@@ -46,12 +58,9 @@ const loader = status =>
         type: "image/png",
         lastModified: Date.now()
       });
-      // const newData = new Blob([data], { type: "image/png" });
-      // const file = new File([newData], "Riverwoodswitch-badge.png");
-      console.log(newFile, newBlob);
       saveAs(newFile);
       loader(false);
-      // window.location.reload();
+      window.location.reload();
     } catch (err) {
       const { response } = err;
       loader(false);

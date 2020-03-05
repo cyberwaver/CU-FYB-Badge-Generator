@@ -89,7 +89,7 @@ app.post("/generate", upload.single("image"), (req, res) => {
       }
     });
     await browser.close();
-    res.write(baseImage);
+    res.send(baseImage);
     res.end();
   })();
 });
