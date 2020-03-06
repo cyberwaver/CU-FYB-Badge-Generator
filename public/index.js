@@ -51,10 +51,10 @@ const loaderText = (type, percent) => {
         ia[i] = byteString.charCodeAt(i);
       }
       const newBlob = new Blob([ab], {
-        type: "image/png"
+        type: "image/jpeg"
       });
 
-      const newFile = new File([newBlob], "Riverwoodswitch-badge.png", {
+      const newFile = new File([newBlob], "Riverwoodswitch-badge.jpg", {
         type: "image/png",
         lastModified: Date.now()
       });

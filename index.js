@@ -77,10 +77,13 @@ app.post("/generate", upload.single("image"), (req, res) => {
 
     const badge = await page.$("#badge");
     const bounding_box = await badge.boundingBox();
+    // console.log(bounding_box);
 
     const baseImage = await badge.screenshot({
       omitBackground: true,
       encoding: "base64",
+      type: "jpeg",
+      quality: 100,
       clip: {
         x: bounding_box.x,
         y: bounding_box.y,
