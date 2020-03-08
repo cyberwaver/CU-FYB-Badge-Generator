@@ -83,7 +83,7 @@ app.post("/generate", upload.single("image"), (req, res) => {
       omitBackground: true,
       encoding: "base64",
       type: "jpeg",
-      quality: 100,
+      quality: 90,
       clip: {
         x: bounding_box.x,
         y: bounding_box.y,
