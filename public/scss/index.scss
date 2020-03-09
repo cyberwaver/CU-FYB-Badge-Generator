@@ -218,7 +218,7 @@ body {
 
 .badge-container {
   display: block;
-  max-width: 500px;
+  max-width: 550px;
   margin: 0 auto;
 }
 
@@ -280,11 +280,12 @@ body {
     }
     &__content {
       font-size: 15px;
+      font-weight: 400;
       letter-spacing: 0.02em;
       padding: 0 20px 70px;
-      color: inherit;
+      color: #fff;
       &--focused {
-        font-weight: 700;
+        font-weight: 600;
       }
 
       &--links {
