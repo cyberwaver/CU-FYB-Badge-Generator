@@ -219,7 +219,7 @@ body {
       font-weight: 400;
       letter-spacing: 0.02em;
       padding: 0 20px 70px;
-      color: #fff; }
+      color: inherit; }
       .badge__right__content--focused {
         font-weight: 600; }
       .badge__right__content--links {
