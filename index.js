@@ -43,13 +43,14 @@ app.post("/generate", upload.single("image"), (req, res) => {
     const file = fileBuffer.toString("base64");
     let browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox"],
-      defaultViewport: {
-        width: 1080,
-        height: 1080
-      }
+      args: ["--no-sandbox"]
     });
     let page = await browser.newPage();
+    page.setViewport({
+      width: 1080,
+      height: 1080,
+      deviceScaleFactor: 3
+    });
     await page.goto(
       `file://${path.resolve(__dirname, "public", "badge.html")}`
     );
