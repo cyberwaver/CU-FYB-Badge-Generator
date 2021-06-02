@@ -195,7 +195,8 @@ body {
         object-fit: contain;
         object-position: center; }
     .badge__right__name {
-      margin: 10px 0 5px 20px;
+      border: 1px solid red;
+      margin: 20px 10px 40px;
       text-align: center;
       font-weight: 600;
       font-size: 34px;
@@ -206,6 +207,7 @@ body {
     .badge__right__attrs__item {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
       font-size: 22.5px; }
       .badge__right__attrs__item__key {
         margin-right: 6px;
