@@ -34,7 +34,6 @@ app.get("/", (req, res) => {
 
 app.post("/generate", upload.single("image"), (req, res) => {
   return (async () => {
-    console.log(req.body);
     const { firstName, lastName, dept, level, unit, food, hobby } = req.body;
     if (!firstName || !lastName)
       return res.status(404).send("First name or last name not found");
@@ -43,14 +42,10 @@ app.post("/generate", upload.single("image"), (req, res) => {
     const file = fileBuffer.toString("base64");
     let browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox"],
+      args: ["--no-sandbox", "--start-maximized"],
     });
     let page = await browser.newPage();
-    page.setViewport({
-      width: 1080,
-      height: 1080,
-      deviceScaleFactor: 3,
-    });
+    await page.setViewport({ width: 1366, height: 768 });
     await page.goto(
       `file://${path.resolve(__dirname, "public", "badge.html")}`
     );

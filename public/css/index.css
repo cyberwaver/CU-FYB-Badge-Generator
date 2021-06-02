@@ -4,7 +4,7 @@
   box-sizing: border-box; }
 
 body {
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-size: 15px;
   position: relative; }
 
@@ -144,7 +144,7 @@ body {
 
 .badge {
   position: relative;
-  font-family: "Roboto", sans-serif;
+  font-family: inherit;
   width: 100%;
   height: 100%;
   display: flex;
@@ -171,14 +171,14 @@ body {
     flex: 1;
     position: relative;
     z-index: 3;
-    width: 100%;
-    min-height: 370px; }
+    width: 100%; }
     .badge__right__inner-box {
-      position: absolute;
+      position: relative;
       left: -40px;
+      right: -40px;
       top: 0;
-      height: 100%;
-      min-width: 100%;
+      min-height: 100%;
+      min-width: calc(100% + 35px);
       z-index: 10; }
     .badge__right__logo {
       margin: 10px 0;
@@ -193,26 +193,35 @@ body {
         object-fit: contain;
         object-position: center; }
     .badge__right__name {
-      margin: 10px 0 20px;
+      margin: 10px 0 5px 20px;
       text-align: center;
       font-weight: 600;
-      font-size: 25px; }
+      font-size: 34px;
+      text-transform: uppercase;
+      line-height: 35px; }
     .badge__right__attrs > *:not(:last-child) {
       margin-bottom: 10px; }
     .badge__right__attrs__item {
       display: flex;
       justify-content: flex-end;
-      font-size: 24px; }
+      font-size: 22.5px; }
       .badge__right__attrs__item__key {
         margin-right: 6px;
-        color: orange; }
-      .badge__right__attrs__item--unit {
+        color: orange;
+        flex: 1;
+        justify-self: flex-end;
+        text-align: right; }
+      .badge__right__attrs__item--dept {
+        margin-left: 12px; }
+      .badge__right__attrs__item--level {
         margin-left: 15px; }
+      .badge__right__attrs__item--unit {
+        margin-left: 20px; }
         .badge__right__attrs__item--unit > *:last-child {
           text-transform: uppercase;
           font-weight: 600; }
       .badge__right__attrs__item--food {
-        margin-left: 27px; }
+        margin-left: 29px; }
       .badge__right__attrs__item--hobby {
         margin-left: 36px; }
     .badge__right__footer {
