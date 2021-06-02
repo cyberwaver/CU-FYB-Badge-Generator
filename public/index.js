@@ -1,12 +1,14 @@
 let E;
 
-const _ = e => document.querySelector(e);
+const _ = (e) => document.querySelector(e);
 
-const serverStatus = type => ({ loaded, total }) => {
-  return loaderText(type, Math.floor((loaded / total) * 100));
-};
+const serverStatus =
+  (type) =>
+  ({ loaded, total }) => {
+    return loaderText(type, Math.floor((loaded / total) * 100));
+  };
 
-const loader = status =>
+const loader = (status) =>
   _("#loader").classList[status ? "remove" : "add"]("hide");
 
 const loaderText = (type, percent) => {
@@ -18,8 +20,8 @@ const loaderText = (type, percent) => {
 (E = _("#download")) &&
   E.addEventListener("click", () => {
     html2canvas(_("#badge"), {
-      backgroundColor: null
-    }).then(canvas => {
+      backgroundColor: null,
+    }).then((canvas) => {
       const a = _("#download-link");
       a.href = canvas.toDataURL("image/png");
       a.click();
@@ -27,11 +29,11 @@ const loaderText = (type, percent) => {
   });
 
 (E = _("#form")) &&
-  E.addEventListener("submit", async e => {
+  E.addEventListener("submit", async (e) => {
     e.preventDefault();
     loader(true);
     const formData = new FormData();
-    e.target.querySelectorAll("input").forEach(item => {
+    e.target.querySelectorAll("input").forEach((item) => {
       const { value, name, type, files } = item;
       formData.append(name, type === "file" ? files[0] : value);
     });
@@ -41,8 +43,8 @@ const loaderText = (type, percent) => {
         data: formData,
         url: "/generate",
         responseType: "stream",
-        onUploadProgress: serverStatus("Uploading..."),
-        onDownloadProgress: serverStatus("Downloading...")
+        onUploadProgress: serverStatus("Generating..."),
+        onDownloadProgress: serverStatus("Downloading..."),
       });
       const byteString = atob(data);
       const ab = new ArrayBuffer(byteString.length);
@@ -51,12 +53,12 @@ const loaderText = (type, percent) => {
         ia[i] = byteString.charCodeAt(i);
       }
       const newBlob = new Blob([ab], {
-        type: "image/jpeg"
+        type: "image/jpeg",
       });
 
-      const newFile = new File([newBlob], "Riverwoodswitch-badge.jpg", {
+      const newFile = new File([newBlob], "CU-FYB-badge.jpg", {
         type: "image/png",
-        lastModified: Date.now()
+        lastModified: Date.now(),
       });
       saveAs(newFile);
       loader(false);

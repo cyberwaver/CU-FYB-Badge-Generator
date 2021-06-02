@@ -34,8 +34,8 @@ app.get("/", (req, res) => {
 
 app.post("/generate", upload.single("image"), (req, res) => {
   return (async () => {
-    // console.log(req.body);
-    const { firstName, lastName } = req.body;
+    console.log(req.body);
+    const { firstName, lastName, dept, level, unit, food, hobby } = req.body;
     if (!firstName || !lastName)
       return res.status(404).send("First name or last name not found");
     if (!req.file) return res.status(404).send("File not found");
@@ -43,37 +43,42 @@ app.post("/generate", upload.single("image"), (req, res) => {
     const file = fileBuffer.toString("base64");
     let browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox"]
+      args: ["--no-sandbox"],
     });
     let page = await browser.newPage();
     page.setViewport({
       width: 1080,
       height: 1080,
-      deviceScaleFactor: 3
+      deviceScaleFactor: 3,
     });
     await page.goto(
       `file://${path.resolve(__dirname, "public", "badge.html")}`
     );
     await page.evaluate(
-      ({ firstName, lastName, file }) => {
+      ({ firstName, lastName, dept, level, unit, food, hobby, file }) => {
         const colors = [
           { bg: "#ff226e", fc: "#fff" },
           { bg: "#01a8cc", fc: "#fff" },
           { bg: "#ff4500", fc: "#fff" },
           { bg: "#c0ff02", fc: "#333" },
-          { bg: "#f6dc2a", fc: "#333" }
+          { bg: "#f6dc2a", fc: "#333" },
         ];
         const i = Math.floor(Math.random() * 5);
         const { bg, fc } = colors[i];
-        const _ = e => document.querySelector(e);
-        _("#badge").style.backgroundColor = bg;
-        _("#badge").style.color = fc;
+        const _ = (e) => document.querySelector(e);
+        // _("#badge").style.backgroundColor = bg;
+        // _("#badge").style.color = fc;
         _("#badge-image").src = `data:image/jpeg;base64,${file}`;
         _("#badge-firstname").textContent = firstName;
         _("#badge-lastname").textContent = lastName;
+        _("#badge-hobby").textContent = hobby;
+        _("#badge-dept").textContent = dept;
+        _("#badge-level").textContent = level;
+        _("#badge-unit").textContent = unit;
+        _("#badge-food").textContent = food;
         return;
       },
-      { firstName, file, lastName }
+      { firstName, lastName, dept, level, unit, food, hobby, file }
     );
 
     const badge = await page.$("#badge");
@@ -89,8 +94,8 @@ app.post("/generate", upload.single("image"), (req, res) => {
         x: bounding_box.x,
         y: bounding_box.y,
         width: Math.min(bounding_box.width, page.viewport().width),
-        height: Math.min(bounding_box.height, page.viewport().height)
-      }
+        height: Math.min(bounding_box.height, page.viewport().height),
+      },
     });
     await browser.close();
     res.send(baseImage);

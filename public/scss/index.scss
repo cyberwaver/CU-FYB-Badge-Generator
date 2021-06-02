@@ -1,4 +1,5 @@
 $color-main: #9b5998;
+$badge-color-black: #333;
 $badge-color-pink: #ff206e;
 $badge-color-yellow: #fee12b;
 $badge-color-blue: #0019cc;
@@ -127,41 +128,10 @@ body {
 }
 
 .info {
-  display: flex;
-  max-height: 300px;
-  &__img-container {
-    flex: 3;
-    &--img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top;
-    }
-  }
-  &__box {
-    overflow: hidden;
-    flex: 2;
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    background-color: $color-main;
-    color: #fff;
-    &--title {
-      line-height: 45px;
-      font-size: 25px;
-    }
-    &--content {
-      line-height: 25px;
-      font-size: 17px;
-    }
-  }
-  @media only screen and (max-width: $md) {
-    &__img-container {
-      display: none;
-    }
-    &__box {
-      padding: 30px 20px;
-    }
+  margin: 30px 0 40px;
+  &__head {
+    text-align: center;
+    font-size: 30px;
   }
 }
 
@@ -223,19 +193,25 @@ body {
 }
 
 .badge {
+  position: relative;
   font-family: "Roboto", sans-serif;
   width: 100%;
   height: 100%;
   display: flex;
-  background-color: $badge-color-pink;
+  background-image: url("../images/bg-image.jpg");
   color: #fff;
   &__left {
-    flex: 2.5;
+    position: relative;
+    flex: 1;
+    min-height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     // padding-left: 1px;
+    clip-path: polygon(1% 0, 79% 0, 99% 100%, 0% 100%);
+    z-index: 5;
     &__img-container {
-      flex: 10;
+      flex: 1;
       &--img {
         display: block;
         height: 100%;
@@ -244,56 +220,85 @@ body {
         object-position: center;
       }
     }
-    &--text {
-      flex: 1;
-      -ms-word-break: break-all;
-      word-break: break-all;
-      word-break: break-word;
-      hyphens: auto;
-      text-align: center;
-      padding: 5px 0;
-      font-size: 20px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
+    // &--text {
+    //   flex: 1;
+    //   -ms-word-break: break-all;
+    //   word-break: break-all;
+    //   word-break: break-word;
+    //   hyphens: auto;
+    //   text-align: center;
+    //   padding: 5px 0;
+    //   font-size: 20px;
+    //   font-weight: 600;
+    //   text-transform: uppercase;
+    //   letter-spacing: 0.1em;
+    // }
   }
   &__right {
-    flex: 3;
-    overflow: hidden;
+    flex: 1;
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    min-height: 370px;
+    &__inner-box {
+      position: absolute;
+      left: -40px;
+      top: 0;
+      height: 100%;
+      min-width: 100%;
+      // padding-right: 1px;
+      z-index: 10;
+    }
     &__logo {
-      margin: 20px auto;
-      width: 70%;
+      margin: 10px 0;
+      width: 50%;
       padding: 8px 2px;
-      background-color: #fff;
       display: flex;
-      justify-content: center;
-      box-shadow: 0px 3px 11px -3px rgba(155, 89, 152, 1);
+      justify-content: flex-start;
+      // box-shadow: 0px 3px 11px -3px rgba(155, 89, 152, 1);
 
       &--img {
         display: block;
         width: auto;
-        height: 50px;
+        height: 40px;
         object-fit: contain;
         object-position: center;
       }
     }
-    &__content {
-      font-size: 15px;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      padding: 0 20px 70px;
-      color: inherit;
-      &--focused {
-        font-weight: 600;
-      }
-
-      &--links {
-        font-size: 14px;
-      }
+    &__name {
+      margin: 10px 0 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 25px;
+    }
+    &__attrs {
       & > * {
         &:not(:last-child) {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
+        }
+      }
+      &__item {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 24px;
+        &__key {
+          margin-right: 6px;
+          color: orange;
+        }
+        &--unit {
+          margin-left: 15px;
+          & > * {
+            &:last-child {
+              text-transform: uppercase;
+              font-weight: 600;
+            }
+          }
+        }
+        &--food {
+          margin-left: 27px;
+        }
+        &--hobby {
+          margin-left: 36px;
         }
       }
     }
@@ -327,6 +332,12 @@ body {
       }
     }
   }
+}
+
+footer {
+  margin: 0 0 20px;
+  font-size: 600;
+  text-align: center;
 }
 
 .download-badge {

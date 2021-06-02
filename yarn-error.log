@@ -1,0 +1,47 @@
+Arguments: 
+  /home/waver/.nvm/versions/node/v14.15.4/bin/node /home/waver/.nvm/versions/node/v14.15.4/bin/yarn install
+
+PATH: 
+  /home/waver/.nvm/versions/node/v14.15.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.15.4
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, lstat '/home/waver/Documents/personal/image-generator-riverwood/node_modules/puppeteer/node_modules/debug/CHANGELOG.md'
+
+npm manifest: 
+  {
+    "name": "image-generator-riverwood",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "scss": "node-sass --watch public/scss/ -o public/css",
+      "start": "node index"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "cors": "^2.8.5",
+      "ejs": "^3.0.1",
+      "express": "^4.17.1",
+      "lowdb": "^1.0.0",
+      "multer": "^1.4.2",
+      "puppeteer": "^2.0.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
